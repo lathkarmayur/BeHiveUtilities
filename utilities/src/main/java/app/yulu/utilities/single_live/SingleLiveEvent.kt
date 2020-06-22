@@ -22,6 +22,7 @@ class SingleLiveEvent <T> : MutableLiveData<T>() {
         super.observe(owner, Observer { t ->
             if (pending.compareAndSet(true, false)) {
                 observer.onChanged(t)
+                removeObserver(observer)
             }
         })
     }
@@ -36,6 +37,7 @@ class SingleLiveEvent <T> : MutableLiveData<T>() {
      */
     @MainThread
     fun call() {
+
         value = null
     }
     companion object {

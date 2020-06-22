@@ -16,19 +16,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        CountryExtractor.instance().getCountryData().observe(this, Observer {
+       /* CountryExtractor.instance().getCountryData().observe(this, Observer {
             Log.i("APPDATA", it[5].countryName)
+        })*/
+
+
+        /*CountryExtractor.instance().getFilterByCountryCode(arrayListOf("in", "ad")).observe(this, Observer {
+            Log.i("APPDATA", it[0].isSelected.toString())
+            //Log.i("APPDATA", it[1].countryName)
+        })*/
+
+
+
+        val data =
+
+        CountryExtractor.instance().getCurrentAndAllCountryData(this)
+
+        data.observe(this, Observer {
+            Log.i("APPDATA", it[0].countryName.toString())
         })
 
 
-        CountryExtractor.instance().getFilterByCountryCode(arrayListOf("in", "ad")).observe(this, Observer {
-            Log.i("APPDATA", it[0].countryName)
-            Log.i("APPDATA", it[1].countryName)
-        })
-
-        CountryExtractor.instance().getCurrentAndAllCountryData(this).observe(this, Observer {
-            Log.i("APPDATA", it.last { it.isSelected }.countryName)
-        })
 
     }
 }
