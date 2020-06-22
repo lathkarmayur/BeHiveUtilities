@@ -1,4 +1,4 @@
-package app.yulu.utilities
+package app.yulu.utilities.location_monitoring
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -27,7 +27,7 @@ var FASTEST_INTERVAL = 500L
 var CHECK_OTHER_LOCATION_UPDATE = 5000L
 private const val MIN_DISTANCE_CHANGE_FOR_UPDATES = 10L
 
-class LocationLiveData (private val context: Context) : MutableLiveData<Location>() {
+open class LocationLiveData (private val context: Context) : MutableLiveData<Location>() {
 
     private var lastLocation: Location? = null
     private var handler : Handler = Handler()
@@ -64,7 +64,8 @@ class LocationLiveData (private val context: Context) : MutableLiveData<Location
         val locationRequest: LocationRequest = LocationRequest.create()
             .apply {
                 interval = INTERVAL
-                fastestInterval = FASTEST_INTERVAL
+                fastestInterval =
+                    FASTEST_INTERVAL
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             }
 
@@ -82,7 +83,7 @@ class LocationLiveData (private val context: Context) : MutableLiveData<Location
      * Default time is 1000L
      */
 
-    fun setLocationInterval(interval: Long, fastestInterval: Long) : LocationLiveData{
+    fun setLocationInterval(interval: Long, fastestInterval: Long) : LocationLiveData {
 
         if(fastestInterval <=  interval){
             INTERVAL = interval
@@ -92,7 +93,7 @@ class LocationLiveData (private val context: Context) : MutableLiveData<Location
         return this
     }
 
-    fun setOtherLocationDetails(interval: Long): LocationLiveData{
+    fun setOtherLocationDetails(interval: Long): LocationLiveData {
         CHECK_OTHER_LOCATION_UPDATE = interval
 
         return this
@@ -100,7 +101,7 @@ class LocationLiveData (private val context: Context) : MutableLiveData<Location
 
 
 
-    fun enablingGps(): LocationLiveData{
+    fun enablingGps(): LocationLiveData {
 
         val builder = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)
@@ -124,7 +125,8 @@ class LocationLiveData (private val context: Context) : MutableLiveData<Location
             if (e is ResolvableApiException) {
                 try {
                     e.startResolutionForResult(context,
-                        REQUEST_CHECK_SETTINGS)
+                        REQUEST_CHECK_SETTINGS
+                    )
                 } catch (sendEx: IntentSender.SendIntentException) {
                     // Ignore the error.
                 }
@@ -219,7 +221,9 @@ class LocationLiveData (private val context: Context) : MutableLiveData<Location
 
     private fun handlerForOtherLocation(){
         runnable?.let {
-            handler.postDelayed(it, CHECK_OTHER_LOCATION_UPDATE)
+            handler.postDelayed(it,
+                CHECK_OTHER_LOCATION_UPDATE
+            )
         }
     }
     @SuppressLint("MissingPermission")
