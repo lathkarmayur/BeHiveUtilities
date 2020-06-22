@@ -59,7 +59,7 @@ class LocationLiveData (private val context: Context) : MutableLiveData<Location
      */
     companion object {
 
-        val REQUEST_CHECK_SETTINGS = 2001
+        const val REQUEST_CHECK_SETTINGS = 2001
 
         val locationRequest: LocationRequest = LocationRequest.create()
             .apply {
