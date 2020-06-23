@@ -3,10 +3,13 @@ package app.yulu.behiveutilities
 import android.content.Context
 import android.os.Bundle
 import android.telephony.TelephonyManager
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import app.yulu.utilities.country_code.CountryExtractor
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,14 +30,32 @@ class MainActivity : AppCompatActivity() {
         })*/
 
 
+        val countryExtractor = CountryExtractor.instance()
 
-        val data =
-
-        CountryExtractor.instance().getCurrentAndAllCountryData(this)
-
-        data.observe(this, Observer {
-            Log.i("APPDATA", it[0].countryName.toString())
+        countryExtractor.filterCountryCodeDataModelLiveEvent.observe(this, Observer {
+            it.forEach {
+                Log.i("APPDATA", it.countryName)
+            }
         })
+
+
+
+        text.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                countryExtractor.setFilteredData(null, this@MainActivity, s.toString())
+            }
+
+        })
+
+        countryExtractor.setFilteredData(null, this@MainActivity, "")
 
 
 

@@ -33,7 +33,7 @@ open class CountryExtractor {
     private val currentCountryCodeDataModelLiveData: SingleLiveEvent<CountryCodeDataModel>
             = SingleLiveEvent()
 
-    private val filterCountryCodeDataModelLiveEvent : MutableLiveData<ArrayList<CountryCodeDataModel>> = MutableLiveData()
+    val filterCountryCodeDataModelLiveEvent : MutableLiveData<ArrayList<CountryCodeDataModel>> = MutableLiveData()
 
 
 
@@ -1332,8 +1332,6 @@ open class CountryExtractor {
             )
         }
 
-        Log.i("APPDATA", countryCodeDataModelArrayList.size.toString())
-
         return countryCodeDataModelArrayList
     }
 
@@ -1428,7 +1426,7 @@ open class CountryExtractor {
 
     val searchedCountryCodeData : ArrayList<CountryCodeDataModel> = ArrayList()
 
-    fun setFilteredData(filterByCountryCode: ArrayList<String>, context: Context, searchText: String?){
+    fun setFilteredData(filterByCountryCode: ArrayList<String>?, context: Context, searchText: String?){
         if(searchText.isNullOrEmpty()){
 
             AsyncT(object : DoBackground{
@@ -1443,8 +1441,12 @@ open class CountryExtractor {
 
                     val countryCodeListData = populateCountryDataRaw()
 
-                    filterByCountryCode.forEach {filterList->
-                        filterCountryCodeData.addAll(countryCodeListData.filter { it.codeName == filterList})
+                    if(!filterByCountryCode.isNullOrEmpty()){
+                        filterByCountryCode.forEach {filterList->
+                            filterCountryCodeData.addAll(countryCodeListData.filter { it.codeName == filterList})
+                        }
+                    }else{
+                        filterCountryCodeData.addAll(countryCodeListData)
                     }
 
                     val tm =
@@ -1454,8 +1456,6 @@ open class CountryExtractor {
                     val indexSearchedElement = filterCountryCodeData.indexOfFirst { countryCodeDataModel -> countryCodeDataModel.codeName == countryCodeValue }
 
                     val toSearch = filterCountryCodeData[indexSearchedElement].also { it.isSelected = true }
-
-                    Log.i("APPDATA", toSearch.isSelected.toString())
 
                     filterCountryCodeData.removeAt(indexSearchedElement)
 
@@ -1483,8 +1483,8 @@ open class CountryExtractor {
                         super.onBackground()
 
                         searchedCountryCodeData.addAll(filterCountryCodeData.filter { it.countryName.contains(searchText, true)
-                                && it.phoneCodeWithPlus.contains(searchText, true)
-                                && it.codeName.contains(searchText, true)
+                                || it.phoneCodeWithPlus.contains(searchText, true)
+                                || it.codeName.contains(searchText, true)
                         })
 
                     }
@@ -1494,7 +1494,7 @@ open class CountryExtractor {
 
                         filterCountryCodeDataModelLiveEvent.postValue(searchedCountryCodeData)
                     }
-                })
+                }).execute()
 
             }else{
 
@@ -1511,8 +1511,12 @@ open class CountryExtractor {
 
                         val countryCodeListData = populateCountryDataRaw()
 
-                        filterByCountryCode.forEach {filterList->
-                            filterCountryCodeData.addAll(countryCodeListData.filter { it.codeName == filterList})
+                        if(!filterByCountryCode.isNullOrEmpty()){
+                            filterByCountryCode.forEach {filterList->
+                                filterCountryCodeData.addAll(countryCodeListData.filter { it.codeName == filterList})
+                            }
+                        }else{
+                            filterCountryCodeData.addAll(countryCodeListData)
                         }
 
                         val tm =
@@ -1523,15 +1527,13 @@ open class CountryExtractor {
 
                         val toSearch = filterCountryCodeData[indexSearchedElement].also { it.isSelected = true }
 
-                        Log.i("APPDATA", toSearch.isSelected.toString())
-
                         filterCountryCodeData.removeAt(indexSearchedElement)
 
                         filterCountryCodeData.add(0, toSearch)
 
                         searchedCountryCodeData.addAll(filterCountryCodeData.filter { it.countryName.contains(searchText, true)
-                                && it.phoneCodeWithPlus.contains(searchText, true)
-                                && it.codeName.contains(searchText, true)
+                                || it.phoneCodeWithPlus.contains(searchText, true)
+                                || it.codeName.contains(searchText, true)
                         })
 
                     }
