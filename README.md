@@ -20,5 +20,5 @@ Add the Following to your gradle file.
 ***Add the dependency***
 
 ```java
-          implementation 'com.github.saurabhYulu:BeHiveUtilities:Tag'
+          implementation 'com.github.saurabhYulu:BeHiveUtilities:1.2'
 ```
