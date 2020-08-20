@@ -20,5 +20,5 @@ Add the Following to your gradle file.
 ***Add the dependency***
 
 ```java
-          implementation 'com.github.saurabhYulu:BeHiveUtilities:1.2'
+          implementation 'com.github.saurabhYulu:BeHiveUtilities:1.3'
 ```
